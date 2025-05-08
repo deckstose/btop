@@ -28,41 +28,54 @@ namespace rng = std::ranges;
 using namespace Tools;
 
 namespace Cpu {
-	string trim_name(string name) {
+	auto trim_name(string name) -> std::string {
 		auto name_vec = ssplit(name);
 
-		if ((s_contains(name, "Xeon"s) or v_contains(name_vec, "Duo"s)) and v_contains(name_vec, "CPU"s)) {
+		if ((s_contains(name, "Xeon"s) or s_contains(name, "XEON") or v_contains(name_vec, "Duo"s)) and
+				v_contains(name_vec, "CPU"s)) {
 			auto cpu_pos = v_index(name_vec, "CPU"s);
-			if (cpu_pos < name_vec.size() - 1 and not name_vec.at(cpu_pos + 1).ends_with(')'))
+			if (cpu_pos < name_vec.size() - 1 and not name_vec.at(cpu_pos + 1).ends_with(')')) {
 				name = name_vec.at(cpu_pos + 1);
-			else
+			} else {
 				name.clear();
-		} else if (v_contains(name_vec, "Ryzen"s)) {
-			auto ryz_pos = v_index(name_vec, "Ryzen"s);
+			}
+		} else if (v_contains(name_vec, "Ryzen"s) or v_contains(name_vec, "EPYC")) {
+			auto pos = v_index(name_vec, "Ryzen"s);
 			name = "Ryzen";
+			if (pos == name_vec.size()) {
+				pos = v_index(name_vec, "EPYC"s);
+				name = "Epyc";
+			}
+
 			int tokens = 0;
-			for (auto i = ryz_pos + 1; i < name_vec.size() && tokens < 2; i++) {
+			for (auto i = pos + 1; i < name_vec.size() && tokens < 2; i++) {
 				const std::string& p = name_vec.at(i);
-				if (p != "AI" && p != "PRO")
+				if (p != "AI" && p != "PRO") {
 					tokens++;
+				}
 				name += " " + p;
 			}
-		} else if (s_contains(name, "Intel"s) and v_contains(name_vec, "CPU"s)) {
+		} else if ((s_contains(name, "Intel"s) or s_contains(name, "INTEL")) and v_contains(name_vec, "CPU"s)) {
 			auto cpu_pos = v_index(name_vec, "CPU"s);
-			if (cpu_pos < name_vec.size() - 1 and not name_vec.at(cpu_pos + 1).ends_with(')') and name_vec.at(cpu_pos + 1) != "@")
+			if (cpu_pos < name_vec.size() - 1 and not name_vec.at(cpu_pos + 1).ends_with(')') and
+					name_vec.at(cpu_pos + 1) != "@") {
 				name = name_vec.at(cpu_pos + 1);
-			else
+			} else {
 				name.clear();
-		} else
+			}
+		} else {
 			name.clear();
+		}
 
 		if (name.empty() and not name_vec.empty()) {
 			for (const auto &n : name_vec) {
-				if (n == "@") break;
+				if (n == "@") {
+					break;
+				}
 				name += n + ' ';
 			}
 			name.pop_back();
-			for (const auto& replace : {"Processor", "CPU", "(R)", "(TM)", "Intel", "AMD", "Apple", "Core"}) {
+			for (const auto& replace : { "Processor", "CPU", "(R)", "(TM)", "Intel", "INTEL", "AMD", "Apple", "Core" }) {
 				name = s_replace(name, replace, "");
 				name = s_replace(name, "  ", " ");
 			}
