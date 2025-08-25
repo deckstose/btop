@@ -71,6 +71,10 @@ namespace Cli {
 				cli.force_utf = true;
 				continue;
 			}
+			if (arg == "--lock-config") {
+				cli.lock_config = true;
+				continue;
+			}
 			if (arg == "-l" || arg == "--low-color") {
 				cli.low_color = true;
 				continue;
@@ -179,6 +183,7 @@ namespace Cli {
 				"  {2}-d, --debug{1}             Start in debug mode with additional logs and metrics\n"
 				"  {2}-f, --filter{1} <filter>   Set an initial process filter\n"
 				"  {2}    --force-utf{1}         Override automatic UTF locale detection\n"
+				"  {2}    --lock-config{1}       Don't write runtime changes to config file.\n"
 				"  {2}-l, --low-color{1}         Disable true color, 256 colors only\n"
 				"  {2}-p, --preset{1} <id>       Start with a preset (0-9)\n"
 				"  {2}-t, --tty{1}               Force tty mode with ANSI graph symbols and 16 colors only\n"

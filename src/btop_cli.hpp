@@ -24,6 +24,8 @@ namespace Cli {
 		std::optional<bool> force_tty;
 		// Use UTF-8 locale even if not detected
 		bool force_utf {};
+		// Don't rite runtime changes to config file.
+		bool lock_config {};
 		// Disable true color and only use 256 color mode
 		bool low_color {};
 		// Start with one of the provided presets

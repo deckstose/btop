@@ -112,6 +112,9 @@ namespace Global {
 	atomic<bool> reload_conf (false);
 }
 
+// Don't write runtime changes to config file.
+static bool lock_config = false;
+
 //* Handler for SIGWINCH and general resizing events, does nothing if terminal hasn't been resized unless force=true
 void term_resize(bool force) {
 	static atomic<bool> resizing (false);
@@ -216,7 +219,9 @@ void clean_quit(int sig) {
 	Gpu::Rsmi::shutdown();
 #endif
 
-	Config::write();
+	if (!lock_config) {
+		Config::write();
+	}
 
 	if (Term::initialized) {
 		Input::clear();
@@ -843,6 +848,7 @@ int main(const int argc, const char** argv) {
 	}
 
 	Global::debug = cli.debug;
+	lock_config = cli.lock_config;
 
 	{
 		const auto config_dir = Config::get_config_dir();
