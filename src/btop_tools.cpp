@@ -33,11 +33,11 @@ tab-size = 4
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
+#include <widechar_width.h>
 
-#include "widechar_width.hpp"
+#include "btop_config.hpp"
 #include "btop_shared.hpp"
 #include "btop_tools.hpp"
-#include "btop_config.hpp"
 
 using std::cout;
 using std::floor;
@@ -218,7 +218,7 @@ namespace Tools {
 			auto w_str = conv.from_bytes((str.size() > 10000 ? str.substr(0, 10000).data() : str.data()));
 
 			for (auto c : w_str) {
-				chars += utf8::wcwidth(c);
+				chars += widechar_wcwidth(c);
 			}
 		}
 		catch (...) {
@@ -232,7 +232,7 @@ namespace Tools {
 		unsigned int chars = 0;
 
 		for (auto c : w_str) {
-			chars += utf8::wcwidth(c);
+			chars += widechar_wcwidth(c);
 		}
 
 		return chars;

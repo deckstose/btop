@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://github.com/ridiculousfish/widecharwidth.git
+revision = 55fd0df9f28238092940a23d25bfab82d6a59dfb
+depth = 1
+patch_directory = widecharwidth
