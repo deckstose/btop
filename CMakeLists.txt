@@ -59,6 +59,7 @@ add_executable(btop
   src/btop_shared.cpp
   src/btop_theme.cpp
   src/btop_tools.cpp
+  src/platform.cpp
 )
 
 if(BTOP_LTO)
@@ -75,13 +76,17 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
   target_sources(btop PRIVATE src/netbsd/btop_collect.cpp)
 elseif(LINUX)
-  target_sources(btop PRIVATE src/linux/btop_collect.cpp)
+  target_sources(btop PRIVATE src/linux/btop_collect.cpp src/linux.cpp)
   if(BTOP_GPU)
     add_subdirectory(src/linux/intel_gpu_top)
   endif()
 else()
   message(FATAL_ERROR "${CMAKE_SYSTEM_NAME} is not supported")
 endif()
+if(BSD)
+  target_sources(btop PRIVATE src/bsd.cpp)
+endif()
+
 
 # Generate build info
 execute_process(
