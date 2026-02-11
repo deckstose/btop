@@ -1,0 +1,16 @@
+---
+Checks: >
+  -*,
+  misc-definitions-in-headers,
+  misc-header-include-cycle,
+  readability-identifier-naming,
+
+CheckOptions:
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.EnumCase: CamelCase
+  readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.GlobalConstantCase: UPPER_CASE
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+  readability-identifier-naming.MemberCase: lower_case
+  readability-identifier-naming.VariableCase: lower_case
